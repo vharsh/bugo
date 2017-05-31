@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/exec"
@@ -27,15 +28,15 @@ func main() {
 		user string
 		host string
 	)
-
+	lognum := flag.String("log-no", "1", "an int")
+	flag.Parse()
 	// Collects system-details
 	user = os.Getenv("USER")
 	host = os.Getenv("HOSTNAME") // Fails try to Run `hostname` instead
 	println("Details from " + user + "@" + host)
-	// Git log(n)
-	n := "1" // TODO
-	out[0] = runc("git", []string{"log", "HEAD", "-" + n, "--pretty=short"})
+	flag.Parse()
+
+	out[0] = runc("git", []string{"log", "HEAD", "-" + *lognum, "--pretty=short"})
 	out[1] = runc("go", []string{"version"})
 	out[2] = runc("m-apiserver", []string{"version"})
-
 }
